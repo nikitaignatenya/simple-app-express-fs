@@ -8,7 +8,7 @@ const {
   postDataByLabel,
   putData,
   deleteData,
-} = require("./srvice");
+} = require("./service");
 
 app.use(bodyparser.json());
 
