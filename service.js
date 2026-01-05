@@ -36,19 +36,38 @@ function postDataByLabel(label, category, priority) {
 }
 
 function putData(id, label, category, priority) {
-  const arr = data();
-  const result = arr.map((el) =>
-    id == el.id ? { id, label, category, priority } : el
-  );
-  fs.writeFileSync("./library.json", JSON.stringify(result));
-  return result;
+  try {
+    const arr = data();
+    const idArr = arr.map((el) => el.id);
+    const newId = label.toLowerCase().split(" ").join("");
+    if (
+      idArr.includes(id) &&
+      typeof priority == "number" &&
+      typeof category == "string"
+    ) {
+      const result = arr.map((el) =>
+        id == el.id ? { id: newId, label, category, priority } : el
+      );
+      fs.writeFileSync("./library.json", JSON.stringify(result));
+      return result;
+    } else throw new Error("Нет совпадений ID");
+  } catch (error) {
+    return error.message;
+  }
 }
 
 function deleteData(id) {
-  const arr = data();
-  const result = arr.filter((el) => id !== el.id);
-  fs.writeFileSync("./library.json", JSON.stringify(result));
-  return result;
+  try {
+    const arr = data();
+    const idArr = arr.map((el) => el.id);
+    if (idArr.includes(id)) {
+      const result = arr.filter((el) => id !== el.id);
+      fs.writeFileSync("./library.json", JSON.stringify(result));
+      return result;
+    } else throw new Error("Нет совпадений ID");
+  } catch (error) {
+    return error.message;
+  }
 }
 
 module.exports = { data, getDataById, postDataByLabel, putData, deleteData };
